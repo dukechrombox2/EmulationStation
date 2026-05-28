@@ -25,6 +25,8 @@ void GridGameListView::setCursor(FileData* file)
 		populateList(file->getParent()->getChildren());
 		mGrid.setCursor(file);
 	}
+
+	updateCursorStack(file);
 }
 
 bool GridGameListView::input(InputConfig* config, Input input)

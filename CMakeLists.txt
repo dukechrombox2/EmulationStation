@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.10)
 
-project(emulationstation-all)
+project(emulationstation VERSION 2.0.0)
 
 #-------------------------------------------------------------------------------
 #add local find scripts to CMAKE path
@@ -45,7 +45,7 @@ endif()
 find_package(Freetype REQUIRED)
 find_package(FreeImage REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system filesystem date_time locale)
+find_package(Boost REQUIRED COMPONENTS filesystem date_time locale)
 find_package(Eigen3 REQUIRED)
 find_package(CURL REQUIRED)
 
@@ -196,3 +196,30 @@ set(LIBRARY_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 add_subdirectory("external")
 add_subdirectory("es-core")
 add_subdirectory("es-app")
+
+#-------------------------------------------------------------------------------
+# set up CPack install stuff so `make install` does something useful
+
+INCLUDE(InstallRequiredSystemLibraries)
+
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A flexible graphical emulator front-end")
+SET(CPACK_PACKAGE_DESCRIPTION "EmulationStation is a flexible, graphical front-end designed for keyboardless navigation of your multi-platform retro game collection.")
+
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md")
+SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Alec Lofquist <allofquist@yahoo.com>")
+SET(CPACK_DEBIAN_PACKAGE_SECTION "misc")
+SET(CPACK_DEBIAN_PACKAGE_PRIORITY "extra")
+SET(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+
+SET(CPACK_PACKAGE_VENDOR "emulationstation.org")
+SET(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+SET(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+SET(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "emulationstation_${PROJECT_VERSION}")
+SET(CPACK_PACKAGE_EXECUTABLES "emulationstation" "emulationstation")
+
+SET(CPACK_GENERATOR "TGZ;DEB")
+
+INCLUDE(CPack)

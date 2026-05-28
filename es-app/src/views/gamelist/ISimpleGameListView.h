@@ -4,6 +4,7 @@
 
 #include "components/TextComponent.h"
 #include "components/ImageComponent.h"
+#include <stack>
 
 class ISimpleGameListView : public IGameListView
 {
@@ -35,4 +36,5 @@ protected:
 	ThemeExtras mThemeExtras;
 
 	std::stack<FileData*> mCursorStack;
+	void updateCursorStack(FileData* cursor);
 };
