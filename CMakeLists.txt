@@ -193,9 +193,15 @@ set(LIBRARY_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 #-------------------------------------------------------------------------------
 # add each component
 
+option(BUILD_TESTS "Build unit tests" OFF)
+
 add_subdirectory("external")
 add_subdirectory("es-core")
 add_subdirectory("es-app")
+
+if(BUILD_TESTS)
+    add_subdirectory("tests")
+endif()
 
 #-------------------------------------------------------------------------------
 # set up CPack install stuff so `make install` does something useful
