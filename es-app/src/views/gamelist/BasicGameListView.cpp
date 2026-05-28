@@ -5,6 +5,7 @@
 #include "ThemeData.h"
 #include "SystemData.h"
 #include "Settings.h"
+#include <stack>
 
 BasicGameListView::BasicGameListView(Window* window, FileData* root)
 	: ISimpleGameListView(window, root), mList(window)
@@ -58,27 +59,9 @@ void BasicGameListView::setCursor(FileData* cursor)
 	{
 		populateList(cursor->getParent()->getChildren());
 		mList.setCursor(cursor);
-
-		// update our cursor stack in case our cursor just got set to some folder we weren't in before
-		if(mCursorStack.empty() || mCursorStack.top() != cursor->getParent())
-		{
-			std::stack<FileData*> tmp;
-			FileData* ptr = cursor->getParent();
-			while(ptr && ptr != mRoot)
-			{
-				tmp.push(ptr);
-				ptr = ptr->getParent();
-			}
-			
-			// flip the stack and put it in mCursorStack
-			mCursorStack = std::stack<FileData*>();
-			while(!tmp.empty())
-			{
-				mCursorStack.push(tmp.top());
-				tmp.pop();
-			}
-		}
 	}
+
+	updateCursorStack(cursor);
 }
 
 void BasicGameListView::launch(FileData* game)
