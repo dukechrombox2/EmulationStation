@@ -5,6 +5,7 @@
 
 std::vector<std::shared_ptr<Sound>> AudioManager::sSoundVector;
 SDL_AudioSpec AudioManager::sAudioFormat;
+SDL_AudioDeviceID AudioManager::sDeviceID = 0;
 std::shared_ptr<AudioManager> AudioManager::sInstance;
 
 
@@ -45,7 +46,7 @@ void AudioManager::mixAudio(void *unused, Uint8 *stream, int len)
 	//we have processed all samples. check if some will still be playing
 	if (!stillPlaying) {
 		//no. pause audio till a Sound::play() wakes us up
-		SDL_PauseAudio(1);
+		SDL_PauseAudioDevice(sDeviceID, 1);
 	}
 }
 
@@ -94,7 +95,8 @@ void AudioManager::init()
 	sAudioFormat.userdata = NULL;
 
 	//Open the audio device and pause
-	if (SDL_OpenAudio(&sAudioFormat, NULL) < 0) {
+	sDeviceID = SDL_OpenAudioDevice(NULL, 0, &sAudioFormat, NULL, 0);
+	if (sDeviceID == 0) {
 		LOG(LogError) << "AudioManager Error - Unable to open SDL audio: " << SDL_GetError() << std::endl;
 	}
 }
@@ -104,7 +106,11 @@ void AudioManager::deinit()
 	//stop all playback
 	stop();
 	//completely tear down SDL audio. else SDL hogs audio resources and emulators might fail to start...
-	SDL_CloseAudio();
+	if(sDeviceID != 0)
+	{
+		SDL_CloseAudioDevice(sDeviceID);
+		sDeviceID = 0;
+	}
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
@@ -134,7 +140,7 @@ void AudioManager::play()
 	getInstance();
 
 	//unpause audio, the mixer will figure out if samples need to be played...
-	SDL_PauseAudio(0);
+	SDL_PauseAudioDevice(sDeviceID, 0);
 }
 
 void AudioManager::stop()
@@ -148,5 +154,15 @@ void AudioManager::stop()
 		}
 	}
 	//pause audio
-	SDL_PauseAudio(1);
+	SDL_PauseAudioDevice(sDeviceID, 1);
+}
+
+void AudioManager::lock()
+{
+	SDL_LockAudioDevice(sDeviceID);
+}
+
+void AudioManager::unlock()
+{
+	SDL_UnlockAudioDevice(sDeviceID);
 }

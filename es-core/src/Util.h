@@ -4,20 +4,21 @@
 #include <Eigen/Dense>
 #include <boost/filesystem.hpp>
 #include <boost/date_time.hpp>
+#include <cmath>
 
 std::string strToUpper(const char* from);
 std::string& strToUpper(std::string& str);
 std::string strToUpper(const std::string& str);
+
+std::string strToLower(const char* from);
+std::string& strToLower(std::string& str);
+std::string strToLower(const std::string& str);
 
 Eigen::Affine3f& roundMatrix(Eigen::Affine3f& mat);
 Eigen::Affine3f roundMatrix(const Eigen::Affine3f& mat);
 
 Eigen::Vector3f roundVector(const Eigen::Vector3f& vec);
 Eigen::Vector2f roundVector(const Eigen::Vector2f& vec);
-
-#if defined(_WIN32) && _MSC_VER < 1800
-float round(float num);
-#endif
 
 std::string getCanonicalPath(const std::string& str);
 

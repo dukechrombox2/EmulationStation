@@ -1,8 +1,9 @@
 #include "FileSorts.h"
+#include "Util.h"
 
 namespace FileSorts
 {
-	const FileData::SortType typesArr[] = {
+	const std::vector<FileData::SortType> SortTypes = {
 		FileData::SortType(&compareFileName, true, "filename, ascending"),
 		FileData::SortType(&compareFileName, false, "filename, descending"),
 
@@ -16,25 +17,12 @@ namespace FileSorts
 		FileData::SortType(&compareLastPlayed, false, "last played, descending")
 	};
 
-	const std::vector<FileData::SortType> SortTypes(typesArr, typesArr + sizeof(typesArr)/sizeof(typesArr[0]));
-
 	//returns if file1 should come before file2
 	bool compareFileName(const FileData* file1, const FileData* file2)
 	{
-		std::string name1 = file1->getName();
-		std::string name2 = file2->getName();
-
-		//min of name1/name2 .length()s
-		unsigned int count = name1.length() > name2.length() ? name2.length() : name1.length();
-		for(unsigned int i = 0; i < count; i++)
-		{
-			if(toupper(name1[i]) != toupper(name2[i]))
-			{
-				return toupper(name1[i]) < toupper(name2[i]);
-			}
-		}
-
-		return name1.length() < name2.length();
+		std::string name1 = strToUpper(file1->getName());
+		std::string name2 = strToUpper(file2->getName());
+		return name1 < name2;
 	}
 
 	bool compareRating(const FileData* file1, const FileData* file2)

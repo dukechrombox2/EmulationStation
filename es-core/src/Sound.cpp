@@ -78,14 +78,14 @@ void Sound::init()
 	}
 	else {
 		//worked. set up member data
-		SDL_LockAudio();
+		AudioManager::lock();
 		mSampleData = cvt.buf;
 		mSampleLength = cvt.len_cvt;
 		mSamplePos = 0;
 		mSampleFormat.channels = 2;
 		mSampleFormat.freq = 44100;
 		mSampleFormat.format = AUDIO_S16;
-		SDL_UnlockAudio();
+		AudioManager::unlock();
 	}
 	//free wav data now
     SDL_FreeWAV(data);
@@ -97,12 +97,12 @@ void Sound::deinit()
 
 	if(mSampleData != NULL)
 	{
-		SDL_LockAudio();
+		AudioManager::lock();
 		delete[] mSampleData;
 		mSampleData = NULL;
 		mSampleLength = 0;
 		mSamplePos = 0;
-		SDL_UnlockAudio();
+		AudioManager::unlock();
 	}
 }
 
@@ -114,7 +114,7 @@ void Sound::play()
 	if(!Settings::getInstance()->getBool("EnableSounds"))
 		return;
 
-	SDL_LockAudio();
+	AudioManager::lock();
 	if (playing)
 	{
 		//replay from start. rewind the sample to the beginning
@@ -126,7 +126,7 @@ void Sound::play()
 		//flag our sample as playing
 		playing = true;
 	}
-	SDL_UnlockAudio();
+	AudioManager::unlock();
 	//tell the AudioManager to start playing samples
 	AudioManager::getInstance()->play();
 }
@@ -139,10 +139,10 @@ bool Sound::isPlaying() const
 void Sound::stop()
 {
 	//flag our sample as playing and rewind its position
-	SDL_LockAudio();
+	AudioManager::lock();
 	playing = false;
 	mSamplePos = 0;
-	SDL_UnlockAudio();
+	AudioManager::unlock();
 }
 
 const Uint8 * Sound::getData() const

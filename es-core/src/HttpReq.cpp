@@ -108,7 +108,7 @@ HttpReq::Status HttpReq::status()
 	{
 		int handle_count;
 		CURLMcode merr = curl_multi_perform(s_multi_handle, &handle_count);
-		if(merr != CURLM_OK && merr != CURLM_CALL_MULTI_PERFORM)
+		if(merr != CURLM_OK)
 		{
 			mStatus = REQ_IO_ERROR;
 			onError(curl_multi_strerror(merr));

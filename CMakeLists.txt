@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
+if(POLICY CMP0072)
+  cmake_policy(SET CMP0072 NEW) # Prefer GLVND
+endif()
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW) # Suppress FindBoost warning
+endif()
+
 project(emulationstation VERSION 2.0.0)
 
 #-------------------------------------------------------------------------------

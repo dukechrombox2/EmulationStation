@@ -12,6 +12,7 @@
 class AudioManager
 {
 	static SDL_AudioSpec sAudioFormat;
+	static SDL_AudioDeviceID sDeviceID;
 	static std::vector<std::shared_ptr<Sound>> sSoundVector;
 	static std::shared_ptr<AudioManager> sInstance;
 
@@ -30,6 +31,9 @@ public:
 
 	void play();
 	void stop();
+
+	static void lock();
+	static void unlock();
 
 	virtual ~AudioManager();
 };

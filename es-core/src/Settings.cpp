@@ -3,22 +3,23 @@
 #include "pugixml/pugixml.hpp"
 #include "platform.h"
 #include <boost/filesystem.hpp>
-#include <boost/assign.hpp>
+#include <algorithm>
 
 Settings* Settings::sInstance = NULL;
 
 // these values are NOT saved to es_settings.xml
 // since they're set through command-line arguments, and not the in-program settings menu
-std::vector<const char*> settings_dont_save = boost::assign::list_of
-	("Debug")
-	("DebugGrid")
-	("DebugText")
-	("ParseGamelistOnly")
-	("ShowExit")
-	("Windowed")
-	("VSync")
-	("HideConsole")
-	("IgnoreGamelist");
+std::vector<std::string> settings_dont_save = {
+	"Debug",
+	"DebugGrid",
+	"DebugText",
+	"ParseGamelistOnly",
+	"ShowExit",
+	"Windowed",
+	"VSync",
+	"HideConsole",
+	"IgnoreGamelist"
+};
 
 Settings::Settings()
 {
